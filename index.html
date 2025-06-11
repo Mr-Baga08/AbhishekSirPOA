@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Academic Collaboration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F4F8;
+            padding-top: 60px; /* Add padding to body to avoid content being hidden by fixed nav */
+        }
+        
+        /* Navigation Styles */
+        .nav-link {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+        .nav-link.active {
+            background-color: #4A90E2;
+            color: white;
+        }
+        .nav-link:not(.active):hover {
+            background-color: #e0e7ff;
+        }
+
+        /* Infographic Specific Styles */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .flowchart-step {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            min-height: 100px;
+            transition: all 0.3s ease;
+            transform: scale(1);
+        }
+         .flowchart-step:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .flowchart-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4A90E2;
+        }
+        .kpi-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+            border-radius: 0.75rem;
+            background-color: #F0F4F8;
+        }
+        .kpi-number {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .kpi-label {
+            margin-top: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        .interactive-card {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        #modal-backdrop {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Dashboard Specific Styles */
+        .progress-bar-container {
+            background-color: #e9ecef;
+            border-radius: 9999px;
+            overflow: hidden;
+            height: 1.25rem;
+        }
+        .progress-bar {
+            background-color: #4A90E2;
+            height: 100%;
+            transition: width 0.5s ease-in-out;
+        }
+        .task-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .task-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .status-dot {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        .status-completed { background-color: #2ECC71; }
+        .status-inprogress { background-color: #F39C12; }
+        .status-notstarted { background-color: #BDC3C7; }
+        .status-needs-approval { background-color: #E74C3C; }
+    </style>
+</head>
+<body>
+
+    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-md z-30">
+        <div class="container mx-auto px-4 sm:px-6 md:px-8">
+            <div class="flex items-center justify-center h-16">
+                <div class="flex items-baseline space-x-4 bg-gray-200 p-1 rounded-lg">
+                    <a id="nav-infographic" class="nav-link active">Infographic</a>
+                    <a id="nav-dashboard" class="nav-link">Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <main id="infographic-view" class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-[#1C3A5A] mb-4">The Market for Strategic Academic Collaboration</h1>
+            <p class="text-xl text-[#4A90E2] max-w-3xl mx-auto">An analysis of the "nearly-published" research landscape and the strategic pathways to co-authorship.</p>
+        </header>
+
+        <section id="opportunity" class="mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-center text-[#1C3A5A] mb-6">The Untapped Opportunity</h2>
+                <p class="text-lg text-gray-700 text-center max-w-4xl mx-auto mb-8">
+                    The academic landscape contains a vast and growing market of "nearly-published" research. Pre-print servers like arXiv host millions of scholarly articles that have completed the primary research phase but have not yet undergone formal peer-review and publication. This "pre-print to publication gap" represents a significant opportunity for strategic collaboration.
+                </p>
+                <div class="kpi-card">
+                    <div class="kpi-number text-[#4A90E2]">2.4M+</div>
+                    <div class="kpi-label text-[#1C3A5A]">Scholarly Articles Hosted on arXiv</div>
+                    <p class="mt-2 text-gray-600">This vast repository indicates a large potential market of projects seeking the final push to publication.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="market-overview" class="mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                    <h3 class="text-2xl font-bold text-[#1C3A5A] mb-4">Market Composition: The Pre-Print Lifecycle</h3>
+                     <p class="text-gray-700 mb-6">
+                        A significant portion of pre-prints represent viable projects that may have stalled for various reasons. Understanding this distribution is key to identifying the most promising collaboration opportunities where targeted assistance can provide the necessary impetus for publication.
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="preprintStatusChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                    <h3 class="text-2xl font-bold text-[#1C3A5A] mb-4">Key Player Analysis: Lead Author Pain Points</h3>
+                    <p class="text-gray-700 mb-6">
+                        Lead authors often face non-research hurdles that delay publication. Offering solutions to these "pain points" is a powerful value proposition for a potential collaborator, moving beyond a simple offer of "help" to providing a concrete solution.
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="authorNeedsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="process-flow" class="mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-center text-[#1C3A5A] mb-2">The Strategic Process Flow to Co-Authorship</h2>
+                <p class="text-lg text-gray-700 text-center max-w-4xl mx-auto mb-10">A systematic, six-month approach transforms the challenge of securing a publication into a manageable and strategic process. This workflow outlines the critical path from initial identification to final submission.</p>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-stretch">
+                    <div class="flowchart-step bg-blue-100 text-[#1C3A5A]"><b>Months 1-2:</b><br>Identify & Scope Opportunities</div>
+                    <div class="flowchart-arrow">→</div>
+                    <div class="flowchart-step bg-blue-200 text-[#1C3A5A]"><b>Month 3:</b><br>Strategic Outreach & Value Proposition</div>
+                    <div class="flowchart-arrow hidden md:flex">→</div>
+                    <div class="flowchart-step bg-blue-300 text-[#1C3A5A]"><b>Month 4:</b><br>Negotiate & Commence Contribution</div>
+                    <div class="flowchart-arrow mt-4 md:hidden">↓</div>
+                    <div class="flowchart-arrow hidden md:flex">→</div>
+                     <div class="flowchart-step bg-blue-400 text-white"><b>Month 5:</b><br>Deep Collaboration & Pre-Submission Prep</div>
+                    <div class="flowchart-arrow">→</div>
+                     <div class="flowchart-step bg-[#4A90E2] text-white"><b>Month 6:</b><br>Finalize, Submit & Plan Dissemination</div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="toolkit" class="mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-center text-[#1C3A5A] mb-2">Strategic Toolkit: The Digital Outreach Engine</h2>
+                <p class="text-lg text-gray-700 text-center max-w-4xl mx-auto mb-10">These innovative strategies create a powerful system for identifying leads, establishing credibility, and engaging potential collaborators. Click on each tool to explore the detailed implementation plan.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="interactive-card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg text-center" onclick="openModal('website')">
+                        <div class="text-5xl mb-4">🌐</div>
+                        <h3 class="text-xl font-bold text-[#1C3A5A] mb-2">Personal Website</h3>
+                        <p class="text-gray-600">The cornerstone of professional credibility, acting as a central hub for your expertise and thought leadership.</p>
+                    </div>
+                    <div class="interactive-card bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg text-center" onclick="openModal('form')">
+                        <div class="text-5xl mb-4">📋</div>
+                        <h3 class="text-xl font-bold text-green-800 mb-2">Google Form</h3>
+                        <p class="text-gray-600">A smart tool for systematically identifying and qualifying researchers who need collaborative support.</p>
+                    </div>
+                    <div class="interactive-card bg-gradient-to-br from-sky-50 to-sky-100 p-6 rounded-lg text-center" onclick="openModal('linkedin')">
+                        <div class="text-5xl mb-4">🔗</div>
+                        <h3 class="text-xl font-bold text-sky-800 mb-2">LinkedIn Visibility</h3>
+                        <p class="text-gray-600">Transform your profile into a networking and PR machine that attracts opportunities.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="core-strategies" class="mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-center text-[#1C3A5A] mb-2">Core Strategies from Deep Research</h2>
+                <p class="text-lg text-gray-700 text-center max-w-4xl mx-auto mb-10">Beyond the tools, these research-backed strategies form the intellectual core of our approach, ensuring we identify and secure the most valuable opportunities. Click each strategy to learn more.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="interactive-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg text-center" onclick="openModal('preprintGap')">
+                        <div class="text-5xl mb-4">⏱️</div>
+                        <h3 class="text-xl font-bold text-purple-800 mb-2">Pre-print to Publication Gap</h3>
+                        <p class="text-gray-600">Targeting stalled papers on pre-print servers to offer timely, critical assistance.</p>
+                    </div>
+                    <div class="interactive-card bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-lg text-center" onclick="openModal('painPoint')">
+                        <div class="text-5xl mb-4">🎯</div>
+                        <h3 class="text-xl font-bold text-yellow-800 mb-2">"Pain Point" Solutions</h3>
+                        <p class="text-gray-600">Providing concrete solutions to specific research problems, not just vague offers of help.</p>
+                    </div>
+                    <div class="interactive-card bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-lg text-center" onclick="openModal('postdocGap')">
+                        <div class="text-5xl mb-4">🎓</div>
+                        <h3 class="text-xl font-bold text-teal-800 mb-2">Post-Doctoral Transition Gaps</h3>
+                        <p class="text-gray-600">Capitalizing on research from recent graduates that needs a final push for publication.</p>
+                    </div>
+                    <div class="interactive-card bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-lg text-center" onclick="openModal('warmIntro')">
+                        <div class="text-5xl mb-4">🤝</div>
+                        <h3 class="text-xl font-bold text-red-800 mb-2">Warm Introductions</h3>
+                        <p class="text-gray-600">Leveraging mutual connections to bypass cold outreach for higher success rates.</p>
+                    </div>
+                    <div class="interactive-card bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg text-center" onclick="openModal('contingency')">
+                        <div class="text-5xl mb-4">🛡️</div>
+                        <h3 class="text-xl font-bold text-indigo-800 mb-2">Robust Contingency Plan</h3>
+                        <p class="text-gray-600">Developing an original paper in parallel to guarantee a publication outcome.</p>
+                    </div>
+                     <div class="interactive-card bg-gradient-to-br from-gray-50 to-gray-200 p-6 rounded-lg text-center" onclick="openModal('openScience')">
+                        <div class="text-5xl mb-4">🔬</div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Open Science Resources</h3>
+                        <p class="text-gray-600">Using public datasets and open-source tools to accelerate independent research.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ethical-framework" class="mb-16">
+             <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-center text-[#1C3A5A] mb-6">The Competitive Landscape: An Ethical Framework</h2>
+                <p class="text-lg text-gray-700 text-center max-w-4xl mx-auto mb-8">
+                    Success in this market requires navigating a competitive landscape defined by strict ethical boundaries. True collaboration is built on substantial intellectual contribution, distinguishing it from unethical practices. Leading academic bodies like the ACM and IEEE provide clear guidelines.
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 border-[#4A90E2] p-4 text-lg text-[#1C3A5A]">Practice</th>
+                                <th class="border-b-2 border-[#4A90E2] p-4 text-lg text-[#1C3A5A]">Ethical Collaboration (Value-Driven)</th>
+                                <th class="border-b-2 border-[#4A90E2] p-4 text-lg text-[#1C3A5A]">Unethical Practice</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-100">
+                                <td class="p-4 border-b border-gray-200 font-semibold text-gray-800">Basis for Authorship</td>
+                                <td class="p-4 border-b border-gray-200 text-green-700">Substantial intellectual contribution (e.g., analysis, writing, conceptualization).</td>
+                                <td class="p-4 border-b border-gray-200 text-red-700">"Gift authorship" granted without significant input or payment for placement.</td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="p-4 border-b border-gray-200 font-semibold text-gray-800">Initial Approach</td>
+                                <td class="p-4 border-b border-gray-200 text-green-700">Offering specific, high-value skills to solve a paper's identified need.</td>
+                                <td class="p-4 border-b border-gray-200 text-red-700">Vague offers of "help" with an immediate demand for co-authorship.</td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="p-4 border-b border-gray-200 font-semibold text-gray-800">Transparency</td>
+                                <td class="p-4 border-b border-gray-200 text-green-700">Open discussion about roles and contributions based on frameworks like CRediT.</td>
+                                <td class="p-4 border-b border-gray-200 text-red-700">Opaque agreements and a lack of clarity on individual contributions.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="future-outlook" class="mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-center text-[#1C3A5A] mb-6">Market Trends & Future Outlook</h2>
+                <p class="text-lg text-gray-700 text-center max-w-4xl mx-auto mb-8">
+                    The academic market is increasingly influenced by the principles of open science. The growth of public datasets and open-source tools lowers the barrier to entry for independent research, creating more opportunities for contribution and making the "Contingency Plan" of writing an original paper more viable than ever.
+                </p>
+                <div class="chart-container">
+                    <canvas id="openScienceTrendChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <main id="dashboard-view" class="container mx-auto p-4 sm:p-6 md:p-8 hidden">
+        <header class="mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-[#1C3A5A]">Project Dashboard</h1>
+            <p class="text-xl text-gray-500 mt-2">Strategic Publication & Profile Elevation Initiative</p>
+        </header>
+
+        <section id="status-overview" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-[#4A90E2]">
+                <h2 class="text-lg font-semibold text-gray-500">Current Status</h2>
+                <p class="text-3xl font-bold text-[#1C3A5A]">In Progress</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-lg font-semibold text-gray-500">Project Start Date</h2>
+                <p class="text-3xl font-bold text-[#1C3A5A]">July 1, 2025</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-lg font-semibold text-gray-500">Last Updated</h2>
+                <p class="text-3xl font-bold text-[#1C3A5A]">June 11, 2025</p>
+            </div>
+        </section>
+
+        <section id="action-items" class="mb-12">
+            <div class="bg-red-50 border-2 border-dashed border-red-300 p-6 rounded-xl shadow-inner">
+                <h2 class="text-2xl font-bold text-red-800 mb-4">Action Required: Your Input is Needed</h2>
+                <p class="text-red-700 mb-6">To maintain momentum, the following items require your review, approval, or input. This is the most critical section for ensuring we stay on schedule.</p>
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded-lg flex justify-between items-center shadow-sm">
+                        <div>
+                            <span class="status-dot status-needs-approval"></span>
+                            <span class="font-semibold">Approve Draft LinkedIn Profile</span>
+                        </div>
+                        <button class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition">Review & Approve</button>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg flex justify-between items-center shadow-sm">
+                         <div>
+                            <span class="status-dot status-needs-approval"></span>
+                            <span class="font-semibold">Provide Professional Headshot</span>
+                        </div>
+                        <button class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition">Upload File</button>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg flex justify-between items-center shadow-sm">
+                         <div>
+                            <span class="status-dot status-needs-approval"></span>
+                            <span class="font-semibold">Review List of Target Researchers (Top 10)</span>
+                        </div>
+                        <button class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition">View List</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="progress-timeline" class="mb-12">
+             <h2 class="text-3xl font-bold text-[#1C3A5A] mb-6">Project Timeline & Progress</h2>
+             <div class="space-y-8">
+                 
+                 <div class="task-card bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-[#4A90E2] mb-4">Month 1: July 2025 - Foundation & Scoping</h3>
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium"><span class="status-dot status-completed"></span>Define Niche & Target Research Areas</span>
+                                <span class="text-sm font-medium text-gray-700">100%</span>
+                            </div>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 100%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium"><span class="status-dot status-completed"></span>Set up Professional Online Presence (Website & Profiles)</span>
+                                <span class="text-sm font-medium text-gray-700">100%</span>
+                            </div>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 100%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium"><span class="status-dot status-inprogress"></span>Identify Initial List of 50 Potential Papers</span>
+                                <span class="text-sm font-medium text-gray-700">40%</span>
+                            </div>
+                             <div class="progress-bar-container"><div class="progress-bar" style="width: 40%;"></div></div>
+                        </div>
+                    </div>
+                 </div>
+
+                 <div class="task-card bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-4">Month 2: August 2025 - Strategic Outreach</h3>
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium"><span class="status-dot status-notstarted"></span>Craft & Send Initial Outreach Communications</span>
+                                <span class="text-sm font-medium text-gray-700">0%</span>
+                            </div>
+                             <div class="progress-bar-container"><div class="progress-bar" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium"><span class="status-dot status-notstarted"></span>Publish First Thought Leadership Article</span>
+                                <span class="text-sm font-medium text-gray-700">0%</span>
+                            </div>
+                             <div class="progress-bar-container"><div class="progress-bar" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                 </div>
+
+                <div class="task-card bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-4">Month 3: September 2025 - Relationship Building</h3>
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium"><span class="status-dot status-notstarted"></span>Follow-up & Nurture Promising Leads</span>
+                                <span class="text-sm font-medium text-gray-700">0%</span>
+                            </div>
+                             <div class="progress-bar-container"><div class="progress-bar" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium"><span class="status-dot status-notstarted"></span>Activate Contingency Plan (Original Paper) if Needed</span>
+                                <span class="text-sm font-medium text-gray-700">0%</span>
+                            </div>
+                             <div class="progress-bar-container"><div class="progress-bar" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                 </div>
+                 
+                 <div class="task-card bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-4">Q4: October - December 2025</h3>
+                    <p class="text-gray-600">This quarter will focus on deep collaboration on a selected paper, finalizing contributions, manuscript submission, and compiling the final portfolio of deliverables.</p>
+                 </div>
+
+             </div>
+        </section>
+
+        <section id="deliverables-tracker">
+            <h2 class="text-3xl font-bold text-[#1C3A5A] mb-6">Key Deliverables Tracker</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-green-100 text-green-800 p-6 rounded-lg text-center">
+                    <div class="text-4xl font-extrabold">1/5</div>
+                    <div class="mt-2 font-semibold">Published Articles & Interviews</div>
+                </div>
+                 <div class="bg-blue-100 text-blue-800 p-6 rounded-lg text-center">
+                    <div class="text-4xl font-extrabold">0/2</div>
+                    <div class="mt-2 font-semibold">Papers Under Review</div>
+                </div>
+                 <div class="bg-purple-100 text-purple-800 p-6 rounded-lg text-center">
+                    <div class="text-4xl font-extrabold">0/1</div>
+                    <div class="mt-2 font-semibold">Letters of Recommendation</div>
+                </div>
+                 <div class="bg-yellow-100 text-yellow-800 p-6 rounded-lg text-center">
+                    <div class="text-4xl font-extrabold">0/1</div>
+                    <div class="mt-2 font-semibold">Final USCIS Dossier</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <div id="modal-backdrop" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40 hidden" onclick="closeModal()"></div>
+    <div id="modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl w-11/12 md:max-w-2xl z-50 p-8 hidden transform transition-transform duration-300 scale-95">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+        <div id="modal-content"></div>
+    </div>
+
+    <footer class="text-center p-4 mt-8">
+        <p class="text-sm text-gray-500">&copy; 2025 Market Research & Analysis. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // --- CHART & MODAL LOGIC ---
+        const brilliantBlues = {
+            primary: '#4A90E2', 
+            secondary: '#1C3A5A',
+            accent1: '#50E3C2', 
+            accent2: '#F5A623', 
+            neutral: '#F0F4F8',
+            text: '#333333'
+        };
+
+        const wrapLabel = (label) => {
+            const maxLen = 16;
+            if (label.length <= maxLen) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxLen && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        };
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            } else {
+              return label;
+            }
+        };
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { color: brilliantBlues.text }
+                },
+                tooltip: { callbacks: { title: tooltipTitleCallback } }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { color: brilliantBlues.text }, grid: { color: '#e0e0e0' } },
+                x: { ticks: { color: brilliantBlues.text }, grid: { display: false } }
+            }
+        };
+
+        // Chart initializations
+        let charts = {};
+        function initCharts() {
+            const preprintStatusCtx = document.getElementById('preprintStatusChart');
+            if (preprintStatusCtx && !charts.preprintStatusChart) {
+                charts.preprintStatusChart = new Chart(preprintStatusCtx, {
+                    type: 'doughnut', data: { labels: ['Undergoing Revision', 'Stalled (High Potential)', 'Active Peer Review', 'Abandoned'], datasets: [{ label: 'Status of Pre-Prints', data: [35, 25, 30, 10], backgroundColor: [ brilliantBlues.primary, brilliantBlues.accent1, brilliantBlues.accent2, '#BDC3C7' ], borderColor: brilliantBlues.neutral, borderWidth: 4 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: brilliantBlues.text } }, tooltip: { callbacks: { title: tooltipTitleCallback } } } }
+                });
+            }
+
+            const authorNeedsCtx = document.getElementById('authorNeedsChart');
+            if (authorNeedsCtx && !charts.authorNeedsChart) {
+                const rawLabelsNeeds = ['Manuscript Formatting & Submission', 'Addressing Peer Reviewer Comments', 'Advanced Statistical Analysis', 'Scientific Writing & Editing'];
+                charts.authorNeedsChart = new Chart(authorNeedsCtx, {
+                    type: 'bar', data: { labels: rawLabelsNeeds.map(wrapLabel), datasets: [{ label: 'Frequency of Need (%)', data: [45, 35, 25, 20], backgroundColor: brilliantBlues.primary, borderColor: brilliantBlues.secondary, borderWidth: 2, borderRadius: 5 }] }, options: defaultChartOptions
+                });
+            }
+            
+            const openScienceTrendCtx = document.getElementById('openScienceTrendChart');
+            if (openScienceTrendCtx && !charts.openScienceTrendChart) {
+                charts.openScienceTrendChart = new Chart(openScienceTrendCtx, {
+                    type: 'line', data: { labels: ['2020', '2021', '2022', '2023', '2024', '2025 (proj.)'], datasets: [{ label: 'Growth of Open Datasets (in Thousands)', data: [150, 210, 280, 370, 480, 600], fill: true, backgroundColor: 'rgba(74, 144, 226, 0.2)', borderColor: brilliantBlues.primary, tension: 0.4, pointBackgroundColor: brilliantBlues.secondary, pointRadius: 5 }] }, options: defaultChartOptions
+                });
+            }
+        }
+        
+        const modalContent = {
+            website: `<h3 class="text-3xl font-bold text-[#1C3A5A] mb-4">Strategy: The Personal Website</h3><p class="text-gray-700 mb-6">A professional website acts as a digital CV and credibility anchor. It's the central hub that legitimizes your client's expertise and provides a platform for showcasing their work and thought leadership.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Key Sections to Include:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li><b>About Page:</b> A compelling narrative of your client's background and interest in AI/Data Science.</li><li><b>Expertise & Interests:</b> Clearly lists skills and specific areas of focus within the field.</li><li><b>Blog/Articles:</b> Hosts all thought leadership content, interviews, and research summaries.</li><li><b>Collaboration Form:</b> A clear call-to-action for potential collaborators to get in touch.</li></ul></div>`,
+            form: `<h3 class="text-3xl font-bold text-green-800 mb-4">Strategy: The Google Form Outreach Tool</h3><p class="text-gray-700 mb-6">This isn't just a form; it's a lead qualification machine. By circulating a strategically designed Google Form, we can filter and identify researchers who are actively seeking the exact kind of support we can provide.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Essential Form Fields:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li><b>Project Topic & Field:</b> To ensure alignment with your client's target area.</li><li><b>Current Stage:</b> (e.g., Draft, Revisions Required, Pre-Submission) to gauge urgency.</li><li><b>Specific Support Needed:</b> (e.g., Writing, Formatting, Data Analysis) to match skills.</li><li><b>Publication Timeline:</b> To identify time-sensitive opportunities.</li></ul><p class="mt-4 text-sm text-gray-600"><b>Distribution Strategy:</b> Share in targeted academic LinkedIn groups, subreddits (r/datascience), and university forums.</p></div>`,
+            linkedin: `<h3 class="text-3xl font-bold text-sky-800 mb-4">Strategy: Optimizing LinkedIn Visibility</h3><p class="text-gray-700 mb-6">LinkedIn will be transformed from a static resume into a dynamic platform for networking, personal branding, and opportunity generation. An optimized profile attracts inbound interest and legitimizes outbound communication.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Key Actions:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li><b>Headline Optimization:</b> Change from a simple job title to a value statement, e.g., "AI/GIS Contributor | Research Collaborator | Helping Bring Ideas to Publication."</li><li><b>Custom Banner:</b> A professional banner that visually communicates expertise in AI and data.</li><li><b>Consistent Posting:</b> Share weekly insights, comment on relevant research, and amplify published articles to build authority.</li><li><b>Proactive Networking:</b> Send personalized connection requests to target authors, referencing their specific work.</li></ul></div>`,
+            preprintGap: `<h3 class="text-3xl font-bold text-purple-800 mb-4">Strategy: Target the Pre-print to Publication Gap</h3><p class="text-gray-700 mb-6">The time lag between a paper appearing on a pre-print server (like arXiv) and its formal publication is a critical window of opportunity. Papers that remain on these servers for 4-8 months often face challenges with reviewer feedback or revisions.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Our Approach:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li>Systematically monitor pre-print servers for relevant papers in this time window.</li><li>Identify the potential hurdles the authors might be facing.</li><li>Offer targeted, timely assistance to overcome these challenges and accelerate their path to publication.</li></ul></div>`,
+            painPoint: `<h3 class="text-3xl font-bold text-yellow-800 mb-4">Strategy: Offer "Pain Point" Solutions</h3><p class="text-gray-700 mb-6">Vague offers of "help" are ineffective. Our strategy is to pinpoint the exact, specific challenges—or "pain points"—that are preventing a paper from moving forward and offer concrete solutions.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Examples of Pain Point Solutions:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li>Conducting more sophisticated statistical analysis required by reviewers.</li><li>Creating high-quality data visualizations to improve clarity.</li><li>Rewriting or strengthening specific sections of the manuscript to address critique.</li><li>Managing the tedious process of formatting and submission.</li></ul></div>`,
+            postdocGap: `<h3 class="text-3xl font-bold text-teal-800 mb-4">Strategy: Leverage Post-Doctoral Transition Gaps</h3><p class="text-gray-700 mb-6">When talented PhDs or postdocs move to new industry jobs, their valuable, nearly-finished research can be left unpublished. Their former supervisors often lack the bandwidth to finalize these projects.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Our Approach:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li>Identify promising research from recent graduates who have transitioned out of academia.</li><li>Contact the supervising professor and offer the dedicated effort required to finalize the manuscript.</li><li>This provides immense value to the professor and revives important research that might otherwise be lost.</li></ul></div>`,
+            warmIntro: `<h3 class="text-3xl font-bold text-red-800 mb-4">Strategy: Prioritize "Warm Introductions"</h3><p class="text-gray-700 mb-6">Cold outreach has a low success rate. A "warm introduction" from a mutual connection is exponentially more powerful and immediately establishes a baseline of trust and credibility.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Our Networking Method:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li>Before any outreach, we map the professional network of the target author on LinkedIn.</li><li>We identify any shared contacts—former colleagues, supervisors, or collaborators.</li><li>We politely request an introduction from the mutual connection, dramatically increasing the likelihood of a positive response.</li></ul></div>`,
+            contingency: `<h3 class="text-3xl font-bold text-indigo-800 mb-4">Strategy: Develop a Robust Contingency Plan</h3><p class="text-gray-700 mb-6">Relying on a single strategy is risky. To guarantee a publication outcome, we will run a parallel track: developing a high-quality, original paper while simultaneously seeking collaborations.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Our Parallel Process:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li>If collaborative leads haven't solidified by Month 3, we activate the contingency plan.</li><li>We focus on creating a high-impact review paper or a study using public data, which is faster to produce.</li><li>This ensures that no matter what, progress is always being made towards a tangible publication deliverable.</li></ul></div>`,
+            openScience: `<h3 class="text-3xl font-bold text-gray-800 mb-4">Strategy: Utilize Open Science Resources</h3><p class="text-gray-700 mb-6">The rise of open science has democratized research. We leverage this trend for our contingency plan, making the creation of an original paper faster and more feasible than ever.</p><div class="bg-gray-100 p-4 rounded-lg"><h4 class="font-bold text-lg text-gray-800 mb-2">Key Open Resources We Use:</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li><b>Public Datasets:</b> Platforms like Kaggle, Google Dataset Search, and Hugging Face provide vast amounts of data for analysis.</li><li><b>Open-Source Tools:</b> We use powerful, free tools like KNIME and Metabase for data science and visualization, avoiding the need for expensive software licenses.</li><li>This approach lowers the barrier to entry and accelerates the timeline for independent research.</li></ul></div>`
+        };
+
+        const modal = document.getElementById('modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalContentContainer = document.getElementById('modal-content');
+
+        function openModal(type) {
+            modalContentContainer.innerHTML = modalContent[type];
+            modalBackdrop.classList.remove('hidden');
+            modalBackdrop.classList.add('opacity-100');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                 modal.classList.remove('scale-95');
+                 modal.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+             modal.classList.remove('scale-100');
+             modal.classList.add('scale-95');
+             modalBackdrop.classList.remove('opacity-100');
+             modalBackdrop.classList.add('opacity-0');
+             setTimeout(() => {
+                modalBackdrop.classList.add('hidden');
+                modal.classList.add('hidden');
+             }, 300);
+        }
+
+
+        // --- VIEW SWITCHING LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const infographicView = document.getElementById('infographic-view');
+            const dashboardView = document.getElementById('dashboard-view');
+            const navInfographic = document.getElementById('nav-infographic');
+            const navDashboard = document.getElementById('nav-dashboard');
+
+            function showView(viewToShow) {
+                // Hide all views
+                infographicView.classList.add('hidden');
+                dashboardView.classList.add('hidden');
+
+                // Deactivate all nav links
+                navInfographic.classList.remove('active');
+                navDashboard.classList.remove('active');
+
+                // Show the selected view and activate its nav link
+                if (viewToShow === 'infographic') {
+                    infographicView.classList.remove('hidden');
+                    navInfographic.classList.add('active');
+                    // Initialize or resize charts for the infographic view
+                    initCharts();
+                } else if (viewToShow === 'dashboard') {
+                    dashboardView.classList.remove('hidden');
+                    navDashboard.classList.add('active');
+                    // Add any dashboard-specific init logic here if needed
+                }
+            }
+
+            navInfographic.addEventListener('click', () => showView('infographic'));
+            navDashboard.addEventListener('click', () => showView('dashboard'));
+            
+            // Show Infographic by default and initialize its charts
+            showView('infographic');
+        });
+    </script>
+</body>
+</html>
